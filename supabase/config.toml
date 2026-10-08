@@ -1,0 +1,12 @@
+# Supabase project settings used by the Supabase CLI (`supabase link`, `supabase functions deploy`).
+# Only function overrides are listed here; everything else uses your hosted project's settings.
+
+[functions.recipes]
+verify_jwt = true
+
+[functions.delete-account]
+verify_jwt = true
+
+# RevenueCat calls this without a Supabase login, so it checks its own shared secret instead.
+[functions.revenuecat-webhook]
+verify_jwt = false
