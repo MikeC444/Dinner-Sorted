@@ -8,4 +8,7 @@ export const env = {
   termsUrl: process.env.EXPO_PUBLIC_TERMS_URL || '',
 };
 
-export const envReady = Boolean(env.supabaseUrl && env.supabaseAnonKey);
+/** Set EXPO_PUBLIC_DEMO=1 to skip sign-in and use built-in sample recipes, even when Supabase keys are present. */
+export const demoMode = process.env.EXPO_PUBLIC_DEMO === '1';
+
+export const envReady = Boolean(env.supabaseUrl && env.supabaseAnonKey) && !demoMode;
