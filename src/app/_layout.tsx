@@ -1,4 +1,5 @@
 import { BricolageGrotesque_600SemiBold, BricolageGrotesque_800ExtraBold } from '@expo-google-fonts/bricolage-grotesque';
+import { Fraunces_600SemiBold, Fraunces_700Bold } from '@expo-google-fonts/fraunces';
 import { DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
 import type { Session } from '@supabase/supabase-js';
 import { useFonts } from 'expo-font';
@@ -50,6 +51,7 @@ function useAuthBootstrap() {
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     BricolageGrotesque_600SemiBold, BricolageGrotesque_800ExtraBold, DMSans_400Regular, DMSans_500Medium, DMSans_700Bold,
+    Fraunces_600SemiBold, Fraunces_700Bold,
   });
   useAuthBootstrap();
   const ready = useApp((s) => s.ready);

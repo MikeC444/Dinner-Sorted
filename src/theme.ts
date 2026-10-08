@@ -42,6 +42,8 @@ export const fonts = {
   body: 'DMSans_400Regular',
   medium: 'DMSans_500Medium',
   bold: 'DMSans_700Bold',
+  serif: 'Fraunces_600SemiBold',
+  serifBold: 'Fraunces_700Bold',
 };
 
 export const radius = { sm: 10, md: 14, lg: 16, xl: 20, pill: 999 };

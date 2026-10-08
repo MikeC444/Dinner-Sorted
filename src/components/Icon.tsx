@@ -23,6 +23,10 @@ const PATHS = {
   leaf: 'M5 19c0-8 6-14 14-14 0 8-6 14-14 14z M5 19l7-7',
   warning: 'M12 3l9.5 17h-19z M12 10v4 M12 17.5v.5',
   list: 'M9 6h11 M9 12h11 M9 18h11 M4 6h.01 M4 12h.01 M4 18h.01',
+  sliders: 'M4 7h9 M17 7h3 M15 5v4 M4 17h3 M11 17h9 M9 15v4 M4 12h16',
+  bookmark: 'M7 4h10v17l-5-4-5 4z',
+  arrow: 'M5 12h14 M13 6l6 6-6 6',
+  pencil: 'M4 20l1-4L16 5l3 3L8 19z M14 7l3 3',
   external: 'M14 4h6v6 M20 4l-9 9 M18 14v5H5V6h5',
 } as const;
 
