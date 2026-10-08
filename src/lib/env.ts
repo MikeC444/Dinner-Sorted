@@ -11,4 +11,7 @@ export const env = {
 /** Set EXPO_PUBLIC_DEMO=1 to skip sign-in and use built-in sample recipes, even when Supabase keys are present. */
 export const demoMode = process.env.EXPO_PUBLIC_DEMO === '1';
 
+/** With demo mode on, EXPO_PUBLIC_DEMO_PREMIUM=1 also unlocks Premium screens. */
+export const demoPremium = process.env.EXPO_PUBLIC_DEMO_PREMIUM === '1';
+
 export const envReady = Boolean(env.supabaseUrl && env.supabaseAnonKey) && !demoMode;

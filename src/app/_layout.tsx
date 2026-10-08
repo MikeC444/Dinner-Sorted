@@ -9,7 +9,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Toast } from '@/components/Toast';
-import { envReady } from '@/lib/env';
+import { demoPremium, envReady } from '@/lib/env';
 import { startPurchases, stopPurchases } from '@/lib/purchases';
 import { supabase } from '@/lib/supabase';
 import { EMPTY_PROFILE, useApp } from '@/state/store';
@@ -22,7 +22,7 @@ function useAuthBootstrap() {
   useEffect(() => {
     if (!envReady) {
       // Demo mode (no Supabase keys): start signed in with a ready-made profile.
-      useApp.setState({ session: { user: { id: 'demo' } } as Session, profile: { ...EMPTY_PROFILE, displayName: 'Demo cook', onboarded: true } });
+      useApp.setState({ session: { user: { id: 'demo' } } as Session, profile: { ...EMPTY_PROFILE, displayName: 'Demo cook', onboarded: true }, premium: demoPremium });
       setReady(true);
       return;
     }
