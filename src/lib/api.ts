@@ -1,6 +1,8 @@
 // Client for the `recipes` edge function. All filtering for allergies and diet happens on the server too.
 
 import type { PantryMatch, Recipe } from '../../supabase/functions/_shared/domain.ts';
+import { demoApi } from './demo';
+import { envReady } from './env';
 import { supabase } from './supabase';
 
 export type RecipeCard = Recipe & { match?: PantryMatch; reason?: string };
@@ -29,7 +31,7 @@ export interface SearchFilters {
   highProtein?: boolean; lowCarb?: boolean; under10?: boolean;
 }
 
-export const api = {
+const liveApi = {
   usage: () => call<{ premium: boolean; kitchenSearchesLeft: number | null }>({ action: 'usage' }),
   suggest: (pantry: string[]) => call<{ recipes: RecipeCard[] }>({ action: 'suggest', pantry }),
   search: (query: string, cuisine: string | null, filters: SearchFilters, page = 0) =>
@@ -39,6 +41,8 @@ export const api = {
   plan: (dinnerBudget: number, pantry: string[]) =>
     call<{ days: { day: string; recipe: RecipeCard }[] }>({ action: 'plan', dinnerBudget, pantry }),
 };
+
+export const api: typeof liveApi = envReady ? liveApi : (demoApi as unknown as typeof liveApi);
 
 export async function deleteAccount(): Promise<void> {
   const { error } = await supabase.functions.invoke('delete-account', { body: {} });

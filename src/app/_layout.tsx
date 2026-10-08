@@ -7,13 +7,12 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
-import { Text, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Toast } from '@/components/Toast';
 import { envReady } from '@/lib/env';
 import { startPurchases, stopPurchases } from '@/lib/purchases';
 import { supabase } from '@/lib/supabase';
-import { useApp } from '@/state/store';
+import { EMPTY_PROFILE, useApp } from '@/state/store';
 import { colors } from '@/theme';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
@@ -21,7 +20,12 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 function useAuthBootstrap() {
   const { setSession, setReady, loadUserData, reset, setPremium } = useApp.getState();
   useEffect(() => {
-    if (!envReady) { setReady(true); return; }
+    if (!envReady) {
+      // Demo mode (no Supabase keys): start signed in with a ready-made profile.
+      useApp.setState({ session: { user: { id: 'demo' } } as Session, profile: { ...EMPTY_PROFILE, displayName: 'Demo cook', onboarded: true } });
+      setReady(true);
+      return;
+    }
     let active = true;
     let loadedFor: string | null | undefined;
     const start = async (session: Session | null) => {
@@ -63,15 +67,6 @@ export default function RootLayout() {
   }, [fontsLoaded, ready]);
 
   if (!fontsLoaded || !ready) return null;
-
-  if (!envReady) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', padding: 24, backgroundColor: colors.bg }}>
-        <Text style={{ fontSize: 18, fontWeight: '700', marginBottom: 8 }}>Setup needed</Text>
-        <Text>Copy .env.example to .env.local and add your Supabase URL and anon key, then restart with "npx expo start --clear".</Text>
-      </View>
-    );
-  }
 
   const signedIn = !!session;
   return (

@@ -2,6 +2,7 @@ import type { Session } from '@supabase/supabase-js';
 import { create } from 'zustand';
 import { DEFAULT_TASTES } from '../../supabase/functions/_shared/domain.ts';
 import type { AllergenKey, Diet, Tastes } from '../../supabase/functions/_shared/domain.ts';
+import { envReady } from '../lib/env';
 import type { PantryItem } from '../lib/ingredients';
 import type { Goal } from '../lib/nutrition';
 import { supabase } from '../lib/supabase';
@@ -81,7 +82,7 @@ export const useApp = create<AppState>((set, get) => ({
   reset: () => set({ profile: EMPTY_PROFILE, premium: false, pantry: [], favourites: [], kitchenSearchesLeft: null }),
 
   async loadUserData() {
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     if (!uid) return;
     const [profileRes, pantryRes, favRes, entRes] = await Promise.all([
       supabase.from('profiles').select('*').eq('id', uid).maybeSingle(),
@@ -104,7 +105,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   async updateProfile(patch) {
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     set({ profile: { ...get().profile, ...patch } });
     if (!uid) return;
     const { error } = await supabase.from('profiles').update(toRow(patch)).eq('id', uid);
@@ -112,7 +113,7 @@ export const useApp = create<AppState>((set, get) => ({
   },
 
   async addPantry(items) {
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     const existing = new Set(get().pantry.map((p) => p.key));
     const fresh = items.filter((i) => !existing.has(i.key));
     if (!fresh.length) return;
@@ -122,18 +123,18 @@ export const useApp = create<AppState>((set, get) => ({
 
   async removePantry(key) {
     set({ pantry: get().pantry.filter((p) => p.key !== key) });
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     if (uid) await supabase.from('pantry_items').delete().eq('user_id', uid).eq('item_key', key);
   },
 
   async clearPantry() {
     set({ pantry: [] });
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     if (uid) await supabase.from('pantry_items').delete().eq('user_id', uid);
   },
 
   async toggleFavourite(f) {
-    const uid = get().session?.user.id;
+    const uid = envReady ? get().session?.user.id : undefined;
     const has = get().favourites.some((x) => x.recipeId === f.recipeId);
     if (has) {
       set({ favourites: get().favourites.filter((x) => x.recipeId !== f.recipeId) });
